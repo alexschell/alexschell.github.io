@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-<title></title>
-
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Empirical logit plots for logistic regression specification search - Alex Schell</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <!-- Styles for R syntax highlighter -->
 <style type="text/css">
    pre .operator,
@@ -48,152 +51,24 @@ hljs.initHighlightingOnLoad();
 <!-- MathJax scripts -->
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Alex Schell</h1>
+        <p class="view"><div style="font-family: Lucida Console; font-size: 14px; color: #707070">AlexSchell :: Data -> Actions</div></p>
+        <p class="view"><div style="font-size: 18px"><a href="http://alexschell.github.io">Back to home</a></div></p>
+        <p class="view">
+      </header>
+      <section>
+        <h2>Empirical logit plots for logistic regression specification search</h2>
 
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
-}
+        <p>Linear regression models assume that the conditional expectation of the dependent variable, E[y|x], is linear in the predictor variables x (modulo any polynomial terms). Simple scatterplots are often useful to check if linearity appears reasonable, or if it requires applying some transformation to a predictor variable.</p>
 
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
-}
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
-}
-
-h1 {
-   font-size:2.2em;
-}
-
-h2 {
-   font-size:1.8em;
-}
-
-h3 {
-   font-size:1.4em;
-}
-
-h4 {
-   font-size:1.0em;
-}
-
-h5 {
-   font-size:0.9em;
-}
-
-h6 {
-   font-size:0.8em;
-}
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
-}
-
-pre, img {
-  max-width: 100%;
-}
-
-pre code {
-   display: block; padding: 0.5em;
-}
-
-code {
-  font-size: 92%;
-  border: 1px solid #ccc;
-}
-
-code[class] {
-  background-color: #F8F8F8;
-}
-
-table, td, th {
-  border: none;
-}
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
-}
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
-}
-
-@media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
-}
-</style>
-
-
-
-</head>
-
-<body>
-<p>This post describes empirical logit plots, a tool for specification testing in logit models.</p>
-
-<p>Linear regression models assume that the conditional expectation of the dependent variable E[y|x] is linear in the predictor variables (modulo polynomial terms). Simple scatterplots are often useful to check if linearity appears reasonable, or if it requires taking some transformation of some predictor variable.</p>
-
-<p>Analogously, logit models assume that the logit-transformed response probability is linear in the predictors. Empirical logit plots are a straightforward analogue of scatterplots for checking this assumption. Since our response variable is binary, we can&#39;t directly logit-transform the variable. But we can place the binary values in equally-sized bins, estimate &ldquo;local&rdquo; probabilities by averaging within each bin, and then logit-transform those probabilities. These are our empirical logits, which we can then plot.</p>
+<p>Analogously, logit models assume that the logit-transformed response probability (i.e. the log odds of response) is linear in the predictors. Empirical logit plots are a straightforward analogue of scatterplots for checking this assumption. Since our response variable is binary, we can&#39;t directly logit-transform the variable. But we can place the binary values in equally-sized bins, estimate &ldquo;local&rdquo; probabilities by averaging within each bin, and then logit-transform those probabilities. These are our empirical logits, which we can then plot.</p>
 
 <p>The following R function does all this:</p>
 
@@ -295,6 +170,11 @@ m2 = glm(y ~ log(x), family=&quot;binomial&quot;)
 
 <p>The misspecified model <code>m1</code> gives us an estimate \(\hat{\beta_1}\) = 0.38, for an estimated marginal probability effect of 0.09 (at \(p_i\) = 0.5). The correctly specified model <code>m2</code> outputs \(\hat{\beta_1}\) = 1.06, and the estimated marginal probability effect is 0.53 (at \(p_i\) = 0.5 and the corresponding geometric mean of \(x\), 1.64).</p>
 
-</body>
-
+      </section>
+      <footer>
+        <p><div style="font-size: 12px">Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></div></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+  </body>
 </html>
