@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Introducing TagTime Visualizer - Alex Schell</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Alex Schell</h1>
+        <p class="view"><div style="font-size: 18px"><a href="http://alexschell.github.io">Back to home</a></div></p>
+        <p class="view">
+      </header>
+      <section>
+        <h2>Introducing TagTime Visualizer</h2>
+        <p>TagTime Visualizer is a <a href="http://shiny.rstudio.com/">Shiny</a> app that grew out of some R scripts I made to visualize my <a href="http://messymatters.com/tagtime/">TagTime</a> data. If you use TagTime, this is probably the best way to make pretty and informative graphs of your data (at least as of early 2015). You can access the app <a href="http://alexschell.shinyapps.io/tagtime-vis/">here</a>; a demo with some of my own data is <a href="http://alexschell.shinyapps.io/tagtime-trends/">here</a>. The respective GitHub repositories are <a href="https://github.com/alexschell/tagtime-vis">here</a> and <a href="http://github.com/alexschell/tagtime-trends">here</a>.</p>
+        <p>This post describes some of the functionality of TagTime Visualizer. Please <a href="http://alexschell.github.io/contact">contact me</a> if you have any questions, comments, or feature requests and the like.</p>
+        <h3><strong>Simple time trend</strong></h3>
+        <img src="files/tt-trend.png">
+        <p>This allows you to explore trends in the amount of time devoted to various activities. The raw data points form a rug next to the x-axis; the main visualization is a histogram with a kernel density curve superimposed. Note that you can adjust the smoothness of the density estimate on a sliding scale, as well as the number of bins in the histogram and the scale of the y-axis (hours per week vs. hours per day).</p>
+        <h3><strong>Matrix plot: date and time of day</strong></h3>
+        <img src="files/tt-mat.png">
+        <p>This type of plot displays time trends as well as patterns in the time of day devoted to activities, by plotting each ping according to its date and time of day (on an ascending 24-hour scale). It is one of the richest plots available; the trend and "time of day" visualizations (see below) display only the margins of this matrix. Note that you can set your own "custom midnight" - your <i>de facto</i> boundary between days. You can also add a second activity to the same plot. Below I added sleep pings to the above matrix plot of productivity:</p>
+        <img src="files/tt-mat2.png">
+        <h3><strong>Time of day</strong></h3>
+        <p>In the same style as the trend plot, this visualization displays a relative measure of how an activity is distributed throughout a typical day. Here is my own data for time spent on personal projects:</p>
+        <img src="files/tt-time.png">
+        <p>Note the option to include all days, only weekdays, or only weekends in the plot.</p>
+        <h3><strong>Weekday and time of day</strong></h3>
+        <img src="files/tt-week.png">
+        <p>Another fairly rich plot. By default, the data points are horizontally jittered/shuffled within each weekday, so it only shows aggregate patterns in how much time you spend on a given activity throughout the week. Checking the "order chronologically" checkbox will sort the data within each weekday "bin" chronologically, allowing you to simultaneously look at daily, weekly, and long-term patterns (at the cost of being a bit hard to interpret).</p>
+        <h3><strong>Scatterplots</strong></h3>
+        <p>To explore relationships between the time devoted to distinct activities within a single day, simple scatterplots are a convenient tool. Here is some aggregate data on my tradeoff between time spent on school and personal projects:</p>
+        <img src="files/tt-scatter.png">
+        <p>The aggregation method used here is the one used in Beeminder: the number of pings in each day is summed and converting to the equivalent in hours. The discreteness makes overplotting a concern, which is dealt with using transparent plotting characters and the "jittering" option (I disabled it here). If you're feeling really adventurous, checking the box "condition on a third variable" will give you a trellis plot where each panel conditions on an (approximate) quartile of the selected variable, in my case sleep:</p>
+        <img src="files/tt-trellis.png">
+      </section>
+      <footer>
+        <p><div style="font-size: 12px">Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></div></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+  </body>
+</html>
