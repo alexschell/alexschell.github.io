@@ -52,10 +52,18 @@ SolverSolve userFinish:=True</code></pre>
         <p>An Excel spreadsheet implementing this approach is available <a href="files/logit.xlsm">here</a>. On the example dataset (the <a href="http://www.stat.columbia.edu/~gelman/arm/examples/arsenic/">Bangladeshi well data</a> from <a href="http://www.stat.columbia.edu/~gelman/arm/">ARM</a>), with 3020 observations and 5 variables, the process takes about a second, and the parameter estimates agree with those produced by the R function glm to 4 significant figures.</p>
         <h3><strong>Newton-Raphson method</strong></h3>
         <p>The Newton-Raphson method involves the following iteration, which converges to the maximum likelihood estimate \(\hat{\beta}\):</p>
+        <p>\[ \beta := \beta - \frac{\partial \ell(\beta; y)/\partial\beta}{\partial^2 \ell(\beta; y)/(\partial\beta)^2} \]
+        <p>The individual partial derivatives evaluate to</p>
+        <p>\[ \frac{\partial \ell}{\partial\beta_j}(\beta; y) = \sum_{i=1}^n (y_i - h(\beta;x_i))x_{ij} \]</p>
+        <p>We can express the gradient in matrix form as follows:</p>
+        <p>\[ \frac{\partial \ell}{\partial\beta}(\beta; y) = X^\top (y - h(\beta;X)) \]</p>
+        <p>where \(h(\beta;X) = 1/(1+e^{-X\beta})\) is the vector of the predicted response probabilities. The individual second derivatives are given by</p>
+        <p>\[ \frac{\partial^2 \ell}{\partial\beta_j \partial\beta_k}(\beta; y) = - \sum_{i=1}^n h(\beta; x_i) (1-h(\beta; x_i)) x_{ij} x_{ik} \]</p>
+        <p>or in matrix form,</p>
+        <p>\[ \frac{\partial^2 \ell}{(\partial\beta)^2}(\beta; y) = -X^\top V X \]</p>
+        <p>where \(V\) is the diagonal matrix with \(h(\beta;X) \circ (1 -  h(\beta;X))\) on the diagonal (\(\circ\) is the elementwise product). We can then write the Newton-Raphson iteration compactly as follows:</p>
         <p>\[ \beta := \beta + (X^\top V X)^{-1} X^\top (y - h(\beta;X)) \]</p>
-        <p>where</p>
-        <p>\[ h(\beta;X) = \frac{1}{1+e^{-X\beta}} \]</p>
-        <p>and \(V\) is the diagonal matrix with \(h(\beta;X) \circ (1 -  h(\beta;X))\) on the diagonal. In the special case of logistic regression, Newton-Raphson is identical to Fisher scoring, which is what most statistical packages use to estimate logistic regression models.</p>
+        <p>In the special case of logistic regression, Newton-Raphson is identical to Fisher scoring, which is what most statistical packages use to estimate logistic regression models.</p>
         <p><i>To be continued...</i></p>
         <h3><strong>Simple gradient ascent</strong></h3>
         <p><i>Coming soon...</i></p>
