@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Optimizing sample size the economic way - Alex Schell</title>
+    <title>Temporal disaggregation with cubic splines in R - Alex Schell</title>
     
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -63,15 +63,11 @@ hljs.initHighlightingOnLoad();
         <p class="view">
       </header>
       <section>
-        <h2>Optimizing sample size the economic way</h2>
-        <p>This post takes a <a href="http://en.wikipedia.org/wiki/Value_of_information">value of information</a> (VOI) approach to the problem of optimizing the sample size of a planned experiment or measurement, with a focus on simple experimental designs applicable to business and self-experimentation. Two basic problems motivate this post:</p>
-
-        <ul>
-        <li><p>VOI tutorials (e.g. chapter 7 of Hubbard&#39;s <em><a href="http://www.amazon.com/How-Measure-Anything-Intangibles-Business/dp/0470539399">How To Measure Anything</a></em>) usually focus on calculating the <em>expected value of perfect information</em> (EVPI). This number puts an upper bound on the value of imperfect measurements. EVPI can be useful in prioritization and in ruling out some costly measurements. But for high-EVPI measurements that are expensive or noisy, getting close to EVPI can be cost prohibitive. In cases like these, a measurement strategy needs to say something about <em>how much</em> measurement is justified on a cost-benefit basis.</p></li>
-        <li><p>The standard method for sample size selection in science is <a href="http://en.wikipedia.org/wiki/Statistical_power">power analysis</a>. This approach chooses the smallest sample size that leaves statistical power at or above some chosen threshold, often 0.8. This approach largely ignores the relative costs of type I vs. type II errors (though cost considerations could inform threshold choices), and completely ignores how costs vary with the magnitude of error. In practical settings (such as clinical trials, business, and self-experiments) these variables can&#39;t be ignored.</p></li>
-        </ul>
-
-        <p>To get the most out of this tutorial, I recommend basic familiarity with value of information as a concept (chapter 7 of Hubbard is a good introduction, and <a href="http://www.lesswrong.com/lw/85x/value_of_information_four_examples/">these</a> <a href="http://www.lesswrong.com/lw/cih/value_of_information_8_examples/">two</a> Less Wrong posts are dense in examples).</p>
+        <h2>Temporal disaggregation with cubic splines in R</h2>
+        <p>I implement cubic spline interpolation as described <a href="http://www.ons.gov.uk/ons/guide-method/user-guidance/index-of-services/index-of-services-annex-c--the-cubic-spline-interpolation-method.pdf">here</a> to disaggregate a low-frequency series to a higher-frequency series, subject to an additivity constraint (appropriate for flows such as GDP or indexes such as CPI).</p>
+        <p>The objective is to obtain a "smooth" curve whose integral over each period \([t-1, t]\) equals the observed value \(X_t\). This is the constraint of <i>temporal additivity</i>:</p>
+		<p>\[ \int_{t-1}^{t} f(u) du = X_t \]</p>
+		<p>To get the most out of this tutorial, I recommend basic familiarity with value of information as a concept (chapter 7 of Hubbard is a good introduction, and <a href="http://www.lesswrong.com/lw/85x/value_of_information_four_examples/">these</a> <a href="http://www.lesswrong.com/lw/cih/value_of_information_8_examples/">two</a> Less Wrong posts are dense in examples).</p>
         
         <h3><strong>The general idea</strong></h3>
 
