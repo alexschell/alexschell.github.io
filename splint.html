@@ -65,9 +65,71 @@ hljs.initHighlightingOnLoad();
       <section>
         <h2>Temporal disaggregation with cubic splines in R</h2>
         <p>I implement cubic spline interpolation as described <a href="http://www.ons.gov.uk/ons/guide-method/user-guidance/index-of-services/index-of-services-annex-c--the-cubic-spline-interpolation-method.pdf">here</a> to disaggregate a low-frequency series to a higher-frequency series, subject to an additivity constraint (appropriate for flows such as GDP or indexes such as CPI).</p>
-        <p>The objective is to obtain a "smooth" curve whose integral over each period \([t-1, t]\) equals the observed value \(X_t\). This is the constraint of <i>temporal additivity</i>:</p>
-		<p>\[ \int_{t-1}^{t} f(u) du = X_t \]</p>
-		<p>To get the most out of this tutorial, I recommend basic familiarity with value of information as a concept (chapter 7 of Hubbard is a good introduction, and <a href="http://www.lesswrong.com/lw/85x/value_of_information_four_examples/">these</a> <a href="http://www.lesswrong.com/lw/cih/value_of_information_8_examples/">two</a> Less Wrong posts are dense in examples).</p>
+        <p>The objective is to obtain a "smooth" curve whose integral over each period \([i-1, i]\) equals the observed value \(X_i\). This is the constraint of <i>temporal additivity</i>:</p>
+		<p>\[ \int_{i-1}^{i} f(t) dt = X_i \]</p>
+		<p>A cubic spline function \(f(t)\) is a piecewise cubic polynomial, specified as follows:</p>
+		<p>\[ f(t) = f_i(t) \text{ for } t \in [i-1,i] \]</p>
+		<p>\[ \text{where } f_i(t) = a_i + b_it + c_it^2 + d_it^3\]</p>
+		<p>To count as "smooth", our spline should at the very least be continuous (no level jumps) and its derivative or slope should be continuous (no kinks). That is, at each join \( 1, 2, ... , T-1\) where adjacent cubic polynomials meet, they should have the same level as well as the same slope:</p>
+		<p>\[ f_t(t) = f_{t+1}(t)\]</p>
+		<p>\[ {f'}_t(t) = {f'}_{t+1}(t)\]</p>
+		
+		<p>Continuity</p>
+		<p>\[ f_t(t) = f_{t+1}(t)\]</p>
+		<p>\[ a_t + b_tt + c_tt^2 + d_tt^3 = a_{t+1} + b_{t+1}t + c_{t+1}t^2 + d_{t+1}t^3\]</p>
+		<p>\[ a_t + b_tt + c_tt^2 + d_tt^3 - a_{t+1} - b_{t+1}t - c_{t+1}t^2 - d_{t+1}t^3 = 0\]</p>
+<pre><code class="r">A1 = matrix(0, 4*k, k-1)
+# Constraint (LHS)
+for (i in 1:(k-1)){
+	idx = (4*i-3):(4*(i+1))
+	A1[idx,i] = c(1, i, i^2, i^3, -1, -i, -i^2, -i^3)
+}
+b1 = rep(0, k-1)  # RHS
+</code></pre>
+		<p>Continuity of first derivative</p>
+		<p>\[ {f'}_t(t) = {f'}_{t+1}(t)\]</p>
+		<p>\[ b_t + 2c_tt + 3d_tt^2 = b_{t+1} + 2c_{t+1}t + 3d_{t+1}t^2\]</p>
+		<p>\[ b_t + 2c_tt + 3d_tt^2 - b_{t+1} - 2c_{t+1}t - 3d_{t+1}t^2 = 0\]</p>
+<pre><code class="r">A2 = matrix(0, 4*k, k-1)
+# Constraint (LHS)
+for (i in 1:(k-1)){
+	idx = (4*i-3):(4*(i+1))
+	A2[idx,i] = c(0, 1, 2*i, 3*i^2, 0, -1, -2*i, -3*i^2)
+}
+b2 = rep(0, k-1)  # RHS
+</code></pre>
+		<p>Additivity</p>
+		<p>\[ \int_{i-1}^{i} f_i(t) dt = X_i \]</p>
+		<p>\[ \int_{i-1}^{i} a_t + b_tt + c_tt^2 + d_tt^3 dt = X_i\]</p>
+		<p>\[ a_i + \frac{b_i}{2}[i^2-(i-1)^2] + \frac{c_i}{3}[i^3-(i-1)^3] + \frac{d_i}{4}[i^4-(i-1)^4] = X_i\]</p>
+<pre><code class="r">A3 = matrix(0, 4*k, k)
+# Constraint (LHS)
+for (i in 1:k){
+    idx = (4*i - 3):(4*i)
+    A3[idx, i] = c(1, (1/2)*(i^2-(i-1)^2), (1/3)*(i^3-(i-1)^3),
+		   (1/4)*(i^4-(i-1)^4))
+}
+b3 = x  # RHS
+
+A = cbind(A1, A2, A3)
+b = c(b1, b2, b3)
+</code></pre>
+		<p>\[ \text{min} \sum_{i=1}^{k} \left(\frac{\partial^2f_i}{\partial t^2}\right)^2 dt \]</p>
+		<p>\[ \text{min} \sum_{i=1}^{k} 4c_i^2 + 12(2i-1)c_id_i + 12(3i^2 - 3i + 1)d_i^2\]</p>
+<pre><code class="r">
+# Objective function
+d = rep(0, 4*k)  # no linear terms
+D = matrix(0, 4*k, 4*k)  # quadratic terms
+for (i in 1:k){
+	tmp = matrix(c(4, 12*(2*i-1), 12*(2*i-1), 12*(3*i^2 - 3*i + 1)),
+		     2, 2)
+	idx = (4*i-1):(4*i)
+	D[idx,idx] = tmp
+}
+
+
+</code></pre>
+
         
         <h3><strong>The general idea</strong></h3>
 
