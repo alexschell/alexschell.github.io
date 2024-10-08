@@ -1,0 +1,29 @@
+---
+layout: post
+title: Temporal disaggregation with cubic splines in R
+---
+
+
+I implement cubic spline interpolation as described [here](http://www.ons.gov.uk/ons/guide-method/user-guidance/index-of-services/index-of-services-annex-c--the-cubic-spline-interpolation-method.pdf) to disaggregate a low-frequency series to a higher-frequency series, subject to an additivity constraint (appropriate for flows such as GDP or indexes such as CPI).
+
+
+The objective is to obtain a "smooth" curve whose integral over each period \( [i−1,i] \) equals the observed value \( X_i \). This is the constraint of _temporal additivity_:
+
+\[ \int_{i-1}^{i} f(t) \,dx = X_i \]
+
+A cubic spline function \( f(t) \) is a piecewise cubic polynomial, specified as follows:
+
+\[ 
+    f(t) = f_i(t) \text{for } t \in [i-1, i]
+    \text{where }f_i(t) = a_i + b_i t + c_i t^2 + d_i t^3
+\]
+
+To count as "smooth", our spline should at the very least be continuous (no level jumps) and its derivative or slope should be continuous (no kinks). That is, at each join \( 1, 2, ... T−1 \) where adjacent cubic polynomials meet, they should have the same level as well as the same slope:
+
+\[
+    f_t(t) = f_{t+1}(t)
+    f'_t(t) = f'_{t+1}(t)
+\]
+
+...
+
