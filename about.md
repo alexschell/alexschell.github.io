@@ -4,12 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+I'm a data scientist working in the Bay Area.
 
-### More Information
+My professional CV is [here]({{ site.baseurl }}/assets/CV.pdf).
 
-A place to include any other types of information that you'd like to include about yourself.
+Old writing: [Cosmological Fine-Tuning and the Inverse Gambler's Fallacy]({{ site.baseurl }}/assets/fta.pdf) (2011) I argue against Roger White's [argument](https://web.mit.edu/rog/www/papers/fine_tuning.pdf) that the fine-tuning argument for multiple universes rests on fallacious probabilistic reasoning.
 
-### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+### Contact
+
+lastname firstname at google email
