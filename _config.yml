@@ -7,22 +7,12 @@ url: "https://alexschell.github.io"
 markdown: kramdown
 permalink: /:year/:title/
 
-collections:
-  essays:
-    output: true
-    permalink: /essays/:path/
-
 defaults:
   - scope:
       path: ""
       type: "posts"
     values:
       layout: "post"
-  - scope:
-      path: ""
-      type: "essays"
-    values:
-      layout: "essay"
 
 exclude:
   - README.md
