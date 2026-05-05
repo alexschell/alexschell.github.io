@@ -1,0 +1,102 @@
+/* Personal site stylesheet — keep it short. */
+
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  max-width: 38em;
+  margin: 2em auto;
+  padding: 0 1em;
+  line-height: 1.5;
+  color: #222;
+  background: #fdfdfd;
+}
+
+header nav {
+  margin-bottom: 2.5em;
+  font-size: 0.95em;
+}
+
+main h1 {
+  font-size: 1.6em;
+  font-weight: normal;
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 0.3em;
+}
+
+h2, h3, h4 {
+  font-weight: normal;
+  font-style: italic;
+  margin-top: 1.5em;
+}
+
+h2 { font-size: 1.3em; }
+h3 { font-size: 1.1em; }
+
+p { margin: 0.8em 0; }
+
+a          { color: #00e; }
+a:visited  { color: #551a8b; }
+a:hover    { text-decoration: none; }
+
+.meta {
+  color: #777;
+  font-style: italic;
+  font-size: 0.95em;
+  margin-top: -0.2em;
+  margin-bottom: 1.5em;
+}
+
+ul.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+ul.post-list li {
+  margin: 0.4em 0;
+}
+
+ul.post-list .date {
+  color: #777;
+  font-size: 0.9em;
+  margin-left: 0.4em;
+}
+
+blockquote {
+  border-left: 2px solid #ccc;
+  margin-left: 0;
+  padding-left: 1em;
+  color: #555;
+}
+
+pre, code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 0.8em 1em;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+}
+
+code {
+  background: #f4f4f4;
+  padding: 0.1em 0.3em;
+}
+
+pre code { background: none; padding: 0; }
+
+img { max-width: 100%; height: auto; }
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 2.5em 0 1em;
+}
+
+footer {
+  font-size: 0.85em;
+  color: #777;
+}
